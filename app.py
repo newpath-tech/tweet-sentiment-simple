@@ -35,8 +35,8 @@ st.set_page_config(
     layout="wide",
     initial_sidebar_state="expanded",
     menu_items={
-        'Get Help': 'https://github.com/yourusername/tweet-sentiment-analytics',
-        'Report a bug': 'https://github.com/yourusername/tweet-sentiment-analytics/issues',
+        'Get Help': 'https://github.com/newpath-tech/tweet-sentiment-simple',
+        'Report a bug': 'https://github.com/newpath-tech/tweet-sentiment-simple/issues',
         'About': "# Tweet Sentiment Analytics Dashboard\n\nComplete sentiment analysis tool for tweets."
     }
 )
