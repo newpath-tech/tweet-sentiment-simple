@@ -23,6 +23,8 @@ import sys
 import traceback
 from typing import Dict, Tuple, Any
 
+from xquik_source import XquikSourceError, fetch_xquik_tweets
+
 # ============================================
 # CONFIGURATION & SETUP
 # ============================================
@@ -267,6 +269,9 @@ def initialize_session_state():
     # Initialize example text - FIXED
     if 'example_text' not in st.session_state:
         st.session_state.example_text = ""
+
+    if 'example_counter' not in st.session_state:
+        st.session_state.example_counter = 0
     
     # Initialize chart style
     if 'chart_style' not in st.session_state:
@@ -989,6 +994,27 @@ def render_live_analysis():
     with col1:
         # Tweet input area - FIXED: Check for example text
         st.markdown("### Enter Tweet Text")
+
+        with st.expander("Optional Xquik Live Source"):
+            xquik_query = st.text_input(
+                "Xquik Search Query",
+                placeholder="python lang:en -is:retweet",
+                help="Set XQUIK_API_KEY to load a public X search result.",
+            )
+
+            if st.button("Load Latest Tweet", use_container_width=True):
+                try:
+                    live_tweets = fetch_xquik_tweets(xquik_query, limit=1)
+                except XquikSourceError as exc:
+                    st.warning(str(exc))
+                else:
+                    if live_tweets:
+                        st.session_state.example_text = live_tweets[0]
+                        st.session_state.example_counter += 1
+                        st.success("Loaded the latest matching tweet.")
+                        st.rerun()
+                    else:
+                        st.info("No tweet text returned for that query.")
         
         # Check for example text in session state
         default_text = st.session_state.example_text if st.session_state.example_text else \
